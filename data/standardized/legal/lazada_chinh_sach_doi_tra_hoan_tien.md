@@ -1,4 +1,4 @@
-# Chinh Sach Doi Tra va Hoan Tien Lazada Vietnam (Return & Refund Policy)
+# Chính Sách Đổi Trả và Hoàn Tiền Lazada Việt Nam (Return & Refund Policy)
 
 **Source:** https://www.lazada.vn/helpcenter/returns-refunds/
 **Customer Role:** buyer
@@ -6,37 +6,37 @@
 
 ---
 
-Chinh Sach Doi Tra va Hoan Tien Lazada Vietnam (Return & Refund Policy)
+Chính Sách Đổi Trả và Hoàn Tiền Lazada Việt Nam (Return & Refund Policy)
 
 URL Source: https://www.lazada.vn/helpcenter/returns-refunds/
 
 Customer Role: buyer
 
-1. Thoi han va Dieu kien Tra hang / Hoan tien
+1. Thời hạn và Điều kiện Trả hàng / Hoàn tiền
 
-Nguoi mua co quyen gui yeu cau Tra hang / Hoan tien trong vong 30 ngay doi voi san pham LazMall va Choice, va trong
+Người mua có quyền gửi yêu cầu Trả hàng / Hoàn tiền trong vòng 30 ngày đối với sản phẩm LazMall và Choice, và
 
-vong 15 ngay doi voi san pham tu Nha ban hang thuong tinh tu ngay nhan hang. San pham doi tra phai con nguyen tem
+trong  vòng  15  ngày  đối  với  sản  phẩm  từ  Nhà  bán  hàng  thường  tính  từ  ngày  nhận  hàng.  Sản  phẩm  đổi  trả  phải  còn
 
-mac, bao boi ban dau, chua qua su dung va co day du phu kien kem theo. Lazada ho tro tra hang voi ly do Doi y doi voi
+nguyên tem mác, bao bì ban đầu, chưa qua sử dụng và có đầy đủ phụ kiện kèm theo. Lazada hỗ trợ trả hàng với lý do
 
-cac gian hang du dieu kien.
+Đổi ý đối với các gian hàng đủ điều kiện.
 
-2. Quy trinh gui san pham va Ban giao don vi van chuyen
+2. Quy trình gửi sản phẩm và Bàn giao đơn vị vận chuyển
 
-Sau khi yeu cau Tra hang duoc chap nhan tren ung dung Lazada, Nguoi mua chon phuong thuc gui hang: Thu gom tai
+Sau khi yêu cầu Trả hàng được chấp nhận trên ứng dụng Lazada, Người mua chọn phương thức gửi hàng: Thu gom
 
-nha (Pick-up) hoac Gui tai buu cuc (Drop-off). Nguoi mua can dong goi san pham can than, dan ma van don doi tra va
+tại nhà (Pick-up) hoặc Gửi tại bưu cục (Drop-off). Người mua cần đóng gói sản phẩm cẩn thận, dán mã vận đơn đổi trả
 
-ban giao cho don vi van chuyen trong vong 3 ngay lam viec. Chi phi van chuyen doi tra se duoc Lazada ho tro neu yeu
+và bàn giao cho đơn vị vận chuyển trong vòng 3 ngày làm việc. Chi phí vận chuyển đổi trả sẽ được Lazada hỗ trợ nếu
 
-cau hop le.
+yêu cầu hợp lệ.
 
-3. Phuong thuc va Thoi gian Xuly Hoan tien
+3. Phương thức và Thời gian Xử lý Hoàn tiền
 
-Sau khi Nha ban hang hoac Kho Lazada nhan va kiem tra hang tra lai thanh cong, tien hoan se duoc chuyen den Nguoi
+Sau khi Nhà bán hàng hoặc Kho Lazada nhận và kiểm tra hàng trả lại thành công, tiền hoàn sẽ được chuyển đến Người
 
-mua. Cac phuong thuc hoan tien bao gom: Vi LazPayLater (hoan lai han muc ngay), The tin dung/ghi no (3-5 ngay lam
+mua. Các phương thức hoàn tiền bao gồm: Ví LazPayLater (hoàn lại hạn mức ngay), Thẻ tín dụng/ghi nợ (3-5 ngày làm
 
-viec), Vi dien tu ZaloPay/Momo (1-2 ngay lam viec), hoac Chuyen khoan ngan hang (3-7 ngay lam viec).
+việc), Ví điện tử ZaloPay/Momo (1-2 ngày làm việc), hoặc Chuyển khoản ngân hàng (3-7 ngày làm việc).
 

@@ -1,8 +1,8 @@
 # Hướng dẫn chi tiết quy trình Trả hàng và Hoàn tiền trên Lazada
 
 **Source:** https://www.lazada.vn/helpcenter/how-to-return-an-item.html
+**Crawled:** 2026-08-04T14:52:43.308863
 **Customer Role:** buyer
-**Crawled:** 2026-08-04T14:27:46.319957
 **Document Type:** news
 
 ---

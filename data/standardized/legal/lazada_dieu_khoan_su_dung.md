@@ -1,4 +1,4 @@
-# Dieu Khoan Su Dung Lazada Vietnam (Terms of Use)
+# Điều Khoản Sử Dụng Lazada Việt Nam (Terms of Use)
 
 **Source:** https://www.lazada.vn/terms-of-use/
 **Customer Role:** both
@@ -6,35 +6,35 @@
 
 ---
 
-Dieu Khoan Su Dung Lazada Vietnam (Terms of Use)
+Điều Khoản Sử Dụng Lazada Việt Nam (Terms of Use)
 
 URL Source: https://www.lazada.vn/terms-of-use/
 
 Customer Role: both
 
-1. Quy dinh chung ve Tai khoan va Dich vu
+1. Quy định chung về Tài khoản và Dịch vụ
 
-Quy dinh nay ap dung cho toan bo nguoi dung (bao gom Nguoi mua va Nguoi ban) khi truy cap va su dung nen tang
+Quy định này áp dụng cho toàn bộ người dùng (bao gồm Người mua và Người bán) khi truy cập và sử dụng nền tảng
 
-thuong mai dien tu Lazada Vietnam. Nguoi dung phai tu bao mat thong tin tai khoan, mat khau va chiu trach nhiem cho
+thương mại điện tử Lazada Việt Nam. Người dùng phải tự bảo mật thông tin tài khoản, mật khẩu và chịu trách nhiệm
 
-moi hoat dong dien ra duoi tai khoan cua minh. Lazada co quyen tam khoa hoac hoan tac tai khoan neu phat hien hanh
+cho mọi hoạt động diễn ra dưới tài khoản của mình. Lazada có quyền tạm khóa hoặc hoàn tác tài khoản nếu phát hiện
 
-vi gian lan, vi pham phap luat hoac vi pham dieu khoan su dung cua san.
+hành vi gian lận, vi phạm pháp luật hoặc vi phạm điều khoản sử dụng của sàn.
 
-2. Quyen so huu tri tue va Quy tac ung xu
+2. Quyền sở hữu trí tuệ và Quy tắc ứng xử
 
-Toan  bo  noi  dung,  logo,  thuong  hieu,  hinh  anh  va  ma  nguon  tren  Lazada  thuoc  quyen  so  huu  cua  Lazada  Group.
+Toàn  bộ  nội  dung,  logo,  thương  hiệu,  hình  ảnh  và  mã  nguồn  trên  Lazada  thuộc  quyền  sở  hữu  của  Lazada  Group.
 
-Nghiem  cam  hanh  vi  sao  chep,  phat  hanh  lai  hoac  khai  thai  thuong  mai  khi  chua  co  su  dong  y  bang  van  ban.  Nguoi
+Nghiêm cấm hành vi sao chép, phát hành lại hoặc khai thác thương mại khi chưa có sự đồng ý bằng văn bản. Người
 
-dung khong duoc dang tai cac noi dung xuc pham, gia moc hoac phat tan ma doc tren nen tang.
+dùng không được đăng tải các nội dung xúc phạm, giả mạo hoặc phát tán mã độc trên nền tảng.
 
-3. Giai quyet tranh chap va Gioi han trach nhiem
+3. Giải quyết tranh chấp và Giới hạn trách nhiệm
 
-Lazada dong vai tro trung gian ket noi Nguoi mua va Nguoi ban. Moi tranh chap phat sinh se duoc uu tien hoa giai dua
+Lazada đóng vai trò trung gian kết nối Người mua và Người bán. Mọi tranh chấp phát sinh sẽ được ưu tiên hòa giải dựa
 
-tren quy dinh cua phap luat Vietnam va chinh sach cua Lazada. Lazada khong chiu trach nhiem cho cac thiet hai gian
+trên quy định của pháp luật Việt Nam và chính sách của Lazada. Lazada không chịu trách nhiệm cho các thiệt hại gián
 
-tiep phat sinh tu viec giat doan dich vu hoac loi tu phia nha cung cap dich vu ben thu ba.
+tiếp phát sinh từ việc gián đoạn dịch vụ hoặc lỗi từ phía nhà cung cấp dịch vụ bên thứ ba.
 

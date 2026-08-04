@@ -1,8 +1,8 @@
 # Chính sách bảo mật dữ liệu và an toàn thông tin người dùng Lazada
 
 **Source:** https://www.lazada.vn/privacy-policy/
+**Crawled:** 2026-08-04T14:52:43.311874
 **Customer Role:** both
-**Crawled:** 2026-08-04T14:27:46.345983
 **Document Type:** news
 
 ---

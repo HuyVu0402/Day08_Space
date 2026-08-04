@@ -1,5 +1,5 @@
 """
-RAG Chatbot — E-commerce Support (Starter Template)
+RAG Chatbot — E-commerce Support (Lazada Domain)
 Streamlit app kết nối RAG Retrieval (Task 9) và Generation (Task 10).
 
 Chạy:
@@ -24,41 +24,85 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # =============================================================================
 
 st.set_page_config(
-    page_title="E-commerce Support RAG Chatbot",
+    page_title="Lazada E-commerce Support RAG Chatbot",
     page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Custom CSS styling
+st.markdown("""
+    <style>
+    .main-header {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 0.2rem;
+    }
+    .sub-header {
+        font-size: 1.05rem;
+        color: #64748B;
+        margin-bottom: 1.5rem;
+    }
+    .source-card {
+        background-color: #F8FAFC;
+        border-left: 4px solid #3B82F6;
+        padding: 0.8rem;
+        border-radius: 4px;
+        margin-bottom: 0.8rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # =============================================================================
 # SIDEBAR — INFO & SETTINGS
 # =============================================================================
 
 with st.sidebar:
-    st.title("🛒 E-commerce Support RAG")
-    st.caption("Trợ lý hỏi đáp về chính sách thương mại điện tử và hỗ trợ khách hàng (đổi trả, thanh toán, bảo mật, người bán)")
+    st.title("🛒 Lazada Support RAG")
+    st.caption("Trợ lý hỏi đáp chính sách Lazada Vietnam (Đổi trả, LazPayLater, Phí người bán, Vận chuyển)")
 
     st.divider()
 
     st.subheader("💡 Câu hỏi gợi ý")
     suggestions = [
-        "Thời hạn yêu cầu trả hàng/hoàn tiền là bao lâu?",
-        "Shopee hỗ trợ những phương thức thanh toán nào?",
-        "Làm sao để đổi phương thức thanh toán đơn hàng?",
-        "Quy định về đăng bán sản phẩm cho người bán?",
-        "Cách mua hàng trên Shopee của quốc gia khác?",
+        "Thời hạn yêu cầu trả hàng hoàn tiền trên Lazada là bao lâu?",
+        "Làm thế nào để kích hoạt và thanh toán ví LazPayLater?",
+        "Thời gian giao hàng dự kiến và tra cứu vận đơn Lazada?",
+        "Biểu phí dịch vụ và phí hoa hồng dành cho Nhà bán hàng?",
+        "Chính sách bảo mật thông tin cá nhân của Lazada?",
+        "Liên hệ Trợ lý ảo CLEO và Tổng đài hỗ trợ 1900 6509?",
     ]
     for s in suggestions:
-        if st.button(s, use_container_width=True, key=f"sug_{s[:20]}"):
+        if st.button(s, use_container_width=True, key=f"sug_{hash(s)}"):
             st.session_state["pending_query"] = s
 
     st.divider()
-    st.subheader("⚙️ Thiết lập")
-    top_k = st.slider("Số chunks retrieval (top_k)", 3, 10, 5)
+    st.subheader("⚙️ Thiết Lập Pipeline")
+
+    # Filter theo customer_role (Bonus +20% UI)
+    role_options = {
+        "Tất cả (Both)": "both",
+        "Người mua (Buyer)": "buyer",
+        "Người bán (Seller)": "seller"
+    }
+    selected_role_label = st.selectbox(
+        "🎯 Đối tượng người dùng (customer_role)",
+        options=list(role_options.keys()),
+        index=0
+    )
+    customer_role = role_options[selected_role_label]
+
+    top_k = st.slider("Số lượng tài liệu truy xuất (top_k)", min_value=3, max_value=10, value=5)
 
     st.divider()
-    st.caption("**Kiến trúc hệ thống:**")
-    st.caption("Hybrid Retrieval (Semantic + BM25) → RRF Rerank → PageIndex Fallback → LLM Generation có Citation")
+    if st.button("🗑️ Xóa lịch sử trò chuyện", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+
+    st.divider()
+    st.caption("**Kiến trúc RAG Pipeline:**")
+    st.caption("Semantic + BM25 ➔ RRF Rerank ➔ PageIndex Fallback (<0.48) ➔ LLM Citation")
 
 # =============================================================================
 # SESSION STATE
@@ -73,8 +117,8 @@ if "pending_query" not in st.session_state:
 # MAIN CHAT AREA
 # =============================================================================
 
-st.title("🛒 E-commerce Support RAG Chatbot")
-st.caption("Hệ thống hỏi đáp chính sách e-commerce và trợ giúp khách hàng")
+st.markdown('<div class="main-header">🛒 Lazada E-commerce Support RAG Chatbot</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Hệ thống hỏi đáp thông minh chính sách Lazada Vietnam hỗ trợ Người mua & Nhà bán hàng</div>', unsafe_allow_html=True)
 
 # Hiển thị lịch sử chat
 for msg in st.session_state.messages:
@@ -86,16 +130,17 @@ for msg in st.session_state.messages:
                     meta = src.get("metadata", {})
                     source_name = meta.get("source", "Unknown")
                     doc_type = meta.get("type", "unknown")
-                    score = src.get("score", 0)
-                    st.markdown(f"**[{i}] {source_name}** `{doc_type}` | score: `{score:.4f}`")
-                    st.text(src.get("content", "")[:300] + "...")
+                    role = meta.get("customer_role", "both")
+                    score = src.get("score", 0.0)
+                    st.markdown(f"**[{i}] {source_name}** | Loại: `{doc_type}` | Role: `{role}` | Score: `{score:.4f}`")
+                    st.text(src.get("content", "")[:350] + "...")
                     st.divider()
 
 # =============================================================================
 # QUERY HANDLING
 # =============================================================================
 
-user_input = st.chat_input("Nhập câu hỏi của bạn về chính sách/hỗ trợ e-commerce...")
+user_input = st.chat_input("Nhập câu hỏi của bạn về chính sách/hỗ trợ Lazada...")
 query = user_input or st.session_state.pending_query
 
 if query:
@@ -108,38 +153,45 @@ if query:
 
     # Sinh câu trả lời từ RAG Pipeline
     with st.chat_message("assistant"):
-        with st.spinner("Đang tìm kiếm tài liệu và tổng hợp câu trả lời..."):
+        with st.spinner("🔍 Đang tìm kiếm chính sách và tổng hợp câu trả lời..."):
+            answer = ""
+            sources = []
             try:
-                # TODO (Học viên): Tích hợp hàm sinh câu trả lời từ Task 10
-                # Ví dụ:
-                # from src.task10_generation import generate_with_citation
-                # response = generate_with_citation(query, top_k=top_k)
-                # answer = response["answer"]
-                # sources = response.get("sources", [])
-
+                # Tích hợp Task 10 (Generation có Citation)
                 from src.task10_generation import generate_with_citation
-                response = generate_with_citation(query, top_k=top_k)
-                answer = response.get("answer", "Chưa thể trả lời.")
+                response = generate_with_citation(query, top_k=top_k, customer_role=customer_role)
+                answer = response.get("answer", "Không tìm thấy thông tin phù hợp.")
                 sources = response.get("sources", [])
 
-            except NotImplementedError:
-                answer = "⚠️ **Task 10 chưa được implement.** Hãy hoàn thành `src/task10_generation.py` để kết nối pipeline vào UI!"
-                sources = []
+            except (ImportError, NotImplementedError):
+                answer = (
+                    "⚠️ **Task 10 (hoặc Task 8 & 9) chưa hoàn thành trong `src/`**\n\n"
+                    "Khi Task 8, Task 9 và Task 10 hoàn tất, giao diện UI này sẽ tự động chạy 100% "
+                    "và sinh câu trả lời đầy đủ kèm trích dẫn nguồn."
+                )
+                # Chạy thử demo retrieval đơn giản từ Task 7 nếu Task 10 chưa có
+                try:
+                    from src.task6_lexical_search import lexical_search
+                    sources = lexical_search(query, top_k=top_k)
+                except Exception:
+                    sources = []
+
             except Exception as e:
-                answer = f"❌ **Lỗi khi chạy RAG Pipeline:** {e}"
+                answer = f"❌ **Lỗi khi thực thi RAG Pipeline:** {e}"
                 sources = []
 
             st.markdown(answer)
 
             if sources:
-                with st.expander(f"📚 Nguồn tham khảo ({len(sources)} chunks)"):
+                with st.expander(f"📚 Nguồn tham khảo trích dẫn ({len(sources)} chunks)"):
                     for i, src in enumerate(sources, 1):
                         meta = src.get("metadata", {})
                         source_name = meta.get("source", "Unknown")
                         doc_type = meta.get("type", "unknown")
-                        score = src.get("score", 0)
-                        st.markdown(f"**[{i}] {source_name}** `{doc_type}` | score: `{score:.4f}`")
-                        st.text(src.get("content", "")[:300] + "...")
+                        role = meta.get("customer_role", "both")
+                        score = src.get("score", 0.0)
+                        st.markdown(f"**[{i}] {source_name}** | Loại: `{doc_type}` | Role: `{role}` | Score: `{score:.4f}`")
+                        st.text(src.get("content", "")[:350] + "...")
                         st.divider()
 
     st.session_state.messages.append({
