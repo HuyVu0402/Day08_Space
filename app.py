@@ -1,5 +1,5 @@
 """
-RAG Chatbot — E-commerce Support (Lazada Domain)
+RAG Chatbot — Light Theme Customer Support UI (Lazada Domain)
 Streamlit app kết nối RAG Retrieval (Task 9) và Generation (Task 10).
 
 Chạy:
@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Thêm project root vào sys.path để import các task từ src/
 PROJECT_ROOT = Path(__file__).parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -24,85 +23,141 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # =============================================================================
 
 st.set_page_config(
-    page_title="Lazada E-commerce Support RAG Chatbot",
+    page_title="Lazada Customer Support RAG Chatbot",
     page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS styling
+# Light Theme CSS
 st.markdown("""
-    <style>
-    .main-header {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #0F172A;
+<style>
+    /* Global Light Background */
+    .stApp {
+        background-color: #F8FAFC;
+        color: #1E293B;
+    }
+
+    /* Sidebar Light */
+    section[data-testid="stSidebar"] {
+        background-color: #FFFFFF !important;
+        border-right: 2px solid #E2E8F0;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #334155 !important;
+    }
+    section[data-testid="stSidebar"] .stSelectbox label,
+    section[data-testid="stSidebar"] .stSlider label {
+        color: #0F172A !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+    }
+
+    /* Page Title */
+    .main-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0369A1;
         margin-bottom: 0.2rem;
     }
-    .sub-header {
-        font-size: 1.05rem;
+    .main-sub {
+        font-size: 1rem;
         color: #64748B;
         margin-bottom: 1.5rem;
     }
-    .source-card {
-        background-color: #F8FAFC;
-        border-left: 4px solid #3B82F6;
-        padding: 0.8rem;
-        border-radius: 4px;
-        margin-bottom: 0.8rem;
+
+    /* Chat Bubbles - Light Theme */
+    div[data-testid="stChatMessage"] {
+        background-color: #FFFFFF !important;
+        border: 1.5px solid #E2E8F0 !important;
+        border-radius: 14px !important;
+        padding: 1.2rem !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+        font-size: 1.05rem !important;
+        line-height: 1.7 !important;
+        color: #1E293B !important;
     }
-    </style>
+
+    /* Assistant bubble accent */
+    div[data-testid="stChatMessage"]:has(div[data-testid="stChatMessageAvatarAssistant"]) {
+        background-color: #F0FDF4 !important;
+        border: 1.5px solid #86EFAC !important;
+    }
+
+    /* Chat Input - Light Theme */
+    div[data-testid="stBottomBlockContainer"] {
+        background: #F8FAFC !important;
+        border-top: 2px solid #0284C7 !important;
+        padding-top: 0.8rem !important;
+    }
+    div[data-testid="stChatInput"] {
+        border: 2px solid #0284C7 !important;
+        border-radius: 12px !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.15) !important;
+    }
+    div[data-testid="stChatInput"]:focus-within {
+        border-color: #059669 !important;
+        box-shadow: 0 0 16px rgba(5, 150, 105, 0.25) !important;
+    }
+    div[data-testid="stChatInput"] textarea {
+        color: #0F172A !important;
+        font-size: 1.05rem !important;
+        font-weight: 500 !important;
+        background-color: #FFFFFF !important;
+    }
+
+    /* Badges */
+    .source-badge {
+        background-color: #0284C7;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 6px;
+    }
+    .role-badge {
+        background-color: #059669;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 6px;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 # =============================================================================
-# SIDEBAR — INFO & SETTINGS
+# SIDEBAR
 # =============================================================================
 
 with st.sidebar:
-    st.title("🛒 Lazada Support RAG")
-    st.caption("Trợ lý hỏi đáp chính sách Lazada Vietnam (Đổi trả, LazPayLater, Phí người bán, Vận chuyển)")
+    st.markdown("### 🛒 Trung Tâm Hỗ Trợ Lazada")
+    st.caption("Trợ lý tra cứu chính sách & tư vấn tự động")
 
-    st.divider()
-
-    st.subheader("💡 Câu hỏi gợi ý")
-    suggestions = [
-        "Thời hạn yêu cầu trả hàng hoàn tiền trên Lazada là bao lâu?",
-        "Làm thế nào để kích hoạt và thanh toán ví LazPayLater?",
-        "Thời gian giao hàng dự kiến và tra cứu vận đơn Lazada?",
-        "Biểu phí dịch vụ và phí hoa hồng dành cho Nhà bán hàng?",
-        "Chính sách bảo mật thông tin cá nhân của Lazada?",
-        "Liên hệ Trợ lý ảo CLEO và Tổng đài hỗ trợ 1900 6509?",
-    ]
-    for s in suggestions:
-        if st.button(s, use_container_width=True, key=f"sug_{hash(s)}"):
-            st.session_state["pending_query"] = s
-
-    st.divider()
-    st.subheader("⚙️ Thiết Lập Pipeline")
-
-    # Filter theo customer_role (Bonus +20% UI)
-    role_options = {
-        "Tất cả (Both)": "both",
-        "Người mua (Buyer)": "buyer",
-        "Người bán (Seller)": "seller"
-    }
-    selected_role_label = st.selectbox(
-        "🎯 Đối tượng người dùng (customer_role)",
-        options=list(role_options.keys()),
-        index=0
-    )
-    customer_role = role_options[selected_role_label]
-
-    top_k = st.slider("Số lượng tài liệu truy xuất (top_k)", min_value=3, max_value=10, value=5)
-
-    st.divider()
-    if st.button("🗑️ Xóa lịch sử trò chuyện", use_container_width=True):
+    if st.button("🗑️ Xóa toàn bộ đoạn chat", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
     st.divider()
+    st.subheader("⚙️ Bộ Lọc & Tìm Kiếm")
+
+    role_options = {
+        "🌐 Tất cả đối tượng (Both)": None,
+        "🛒 Người mua hàng (Buyer)": "buyer",
+        "🏪 Nhà bán hàng (Seller)": "seller"
+    }
+    selected_role_label = st.selectbox("Đối tượng cần tư vấn", options=list(role_options.keys()), index=0)
+    customer_role = role_options[selected_role_label]
+
+    top_k = st.slider("Số lượng tài liệu trích xuất (top_k)", min_value=3, max_value=10, value=5)
+
+    st.divider()
     st.caption("**Kiến trúc RAG Pipeline:**")
-    st.caption("Semantic + BM25 ➔ RRF Rerank ➔ PageIndex Fallback (<0.48) ➔ LLM Citation")
+    st.caption("Semantic + BM25 ➔ RRF Rerank ➔ PageIndex Fallback ➔ LLM Citation")
 
 # =============================================================================
 # SESSION STATE
@@ -110,92 +165,93 @@ with st.sidebar:
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
-if "pending_query" not in st.session_state:
-    st.session_state.pending_query = None
 
 # =============================================================================
-# MAIN CHAT AREA
+# MAIN CHAT INTERFACE
 # =============================================================================
 
-st.markdown('<div class="main-header">🛒 Lazada E-commerce Support RAG Chatbot</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Hệ thống hỏi đáp thông minh chính sách Lazada Vietnam hỗ trợ Người mua & Nhà bán hàng</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">🛒 CỔNG TƯ VẤN & HỖ TRỢ KHÁCH HÀNG LAZADA</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-sub">Hệ thống tra cứu chính thức Đổi trả, Ví LazPayLater, Vận chuyển & Biểu phí Nhà bán hàng</div>', unsafe_allow_html=True)
 
-# Hiển thị lịch sử chat
+if not st.session_state.messages:
+    st.info("👋 Chào bạn! Hãy nhập câu hỏi vào khung chat bên dưới để Trợ lý giải đáp ngay lập tức.")
+
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
+    avatar = "👤" if msg["role"] == "user" else "🛒"
+    with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
+
         if msg["role"] == "assistant" and "sources" in msg and msg["sources"]:
-            with st.expander(f"📚 Nguồn tham khảo ({len(msg['sources'])} chunks)"):
-                for i, src in enumerate(msg["sources"], 1):
-                    meta = src.get("metadata", {})
-                    source_name = meta.get("source", "Unknown")
+            ret_src = msg.get("retrieval_source", "hybrid").upper()
+            with st.expander(f"📚 Nguồn tham khảo ({len(msg['sources'])} tài liệu | Phương thức: {ret_src})"):
+                for idx, src in enumerate(msg["sources"], 1):
+                    meta = src.get("metadata", {}) or {}
+                    doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
                     doc_type = meta.get("type", "unknown")
                     role = meta.get("customer_role", "both")
                     score = src.get("score", 0.0)
-                    st.markdown(f"**[{i}] {source_name}** | Loại: `{doc_type}` | Role: `{role}` | Score: `{score:.4f}`")
-                    st.text(src.get("content", "")[:350] + "...")
+                    st.markdown(
+                        f"**[{idx}] {doc_name}** | "
+                        f"<span class='source-badge'>{doc_type.upper()}</span> "
+                        f"<span class='role-badge'>{role.upper()}</span> "
+                        f"| Điểm: `{score:.4f}`",
+                        unsafe_allow_html=True
+                    )
+                    st.text(src.get("content", "").strip()[:350] + "...")
                     st.divider()
 
 # =============================================================================
-# QUERY HANDLING
+# CHAT INPUT & EXECUTION
 # =============================================================================
 
-user_input = st.chat_input("Nhập câu hỏi của bạn về chính sách/hỗ trợ Lazada...")
-query = user_input or st.session_state.pending_query
+query = st.chat_input("💬 Nhập câu hỏi về chính sách Lazada tại đây...")
 
 if query:
-    st.session_state.pending_query = None
-
-    # Hiển thị câu hỏi của user
     st.session_state.messages.append({"role": "user", "content": query})
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="👤"):
         st.markdown(query)
 
-    # Sinh câu trả lời từ RAG Pipeline
-    with st.chat_message("assistant"):
-        with st.spinner("🔍 Đang tìm kiếm chính sách và tổng hợp câu trả lời..."):
+    with st.chat_message("assistant", avatar="🛒"):
+        with st.spinner("🔍 Đang tra cứu tài liệu và tổng hợp câu trả lời..."):
             answer = ""
             sources = []
+            retrieval_source = "hybrid"
+
             try:
-                # Tích hợp Task 10 (Generation có Citation)
                 from src.task10_generation import generate_with_citation
-                response = generate_with_citation(query, top_k=top_k, customer_role=customer_role)
-                answer = response.get("answer", "Không tìm thấy thông tin phù hợp.")
-                sources = response.get("sources", [])
-
-            except (ImportError, NotImplementedError):
-                answer = (
-                    "⚠️ **Task 10 (hoặc Task 8 & 9) chưa hoàn thành trong `src/`**\n\n"
-                    "Khi Task 8, Task 9 và Task 10 hoàn tất, giao diện UI này sẽ tự động chạy 100% "
-                    "và sinh câu trả lời đầy đủ kèm trích dẫn nguồn."
-                )
-                # Chạy thử demo retrieval đơn giản từ Task 7 nếu Task 10 chưa có
-                try:
-                    from src.task6_lexical_search import lexical_search
-                    sources = lexical_search(query, top_k=top_k)
-                except Exception:
-                    sources = []
-
+                res = generate_with_citation(query, top_k=top_k, customer_role=customer_role)
+                answer = res.get("answer", "Tôi không thể xác minh thông tin này từ nguồn hiện có.")
+                sources = res.get("sources", [])
+                retrieval_source = res.get("retrieval_source", "hybrid")
             except Exception as e:
-                answer = f"❌ **Lỗi khi thực thi RAG Pipeline:** {e}"
+                answer = f"❌ **Lỗi xử lý RAG Pipeline:** {e}"
                 sources = []
+                retrieval_source = "error"
 
             st.markdown(answer)
 
             if sources:
-                with st.expander(f"📚 Nguồn tham khảo trích dẫn ({len(sources)} chunks)"):
-                    for i, src in enumerate(sources, 1):
-                        meta = src.get("metadata", {})
-                        source_name = meta.get("source", "Unknown")
+                ret_src = retrieval_source.upper()
+                with st.expander(f"📚 Nguồn tham khảo ({len(sources)} tài liệu | Phương thức: {ret_src})"):
+                    for idx, src in enumerate(sources, 1):
+                        meta = src.get("metadata", {}) or {}
+                        doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
                         doc_type = meta.get("type", "unknown")
                         role = meta.get("customer_role", "both")
                         score = src.get("score", 0.0)
-                        st.markdown(f"**[{i}] {source_name}** | Loại: `{doc_type}` | Role: `{role}` | Score: `{score:.4f}`")
-                        st.text(src.get("content", "")[:350] + "...")
+                        st.markdown(
+                            f"**[{idx}] {doc_name}** | "
+                            f"<span class='source-badge'>{doc_type.upper()}</span> "
+                            f"<span class='role-badge'>{role.upper()}</span> "
+                            f"| Điểm: `{score:.4f}`",
+                            unsafe_allow_html=True
+                        )
+                        st.text(src.get("content", "").strip()[:350] + "...")
                         st.divider()
 
     st.session_state.messages.append({
         "role": "assistant",
         "content": answer,
         "sources": sources,
+        "retrieval_source": retrieval_source
     })
