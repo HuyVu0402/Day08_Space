@@ -156,6 +156,19 @@ with st.sidebar:
     top_k = st.slider("Số lượng tài liệu trích xuất (top_k)", min_value=3, max_value=10, value=5)
 
     st.divider()
+    st.subheader("📊 Ngưỡng Điều Chỉnh")
+    score_threshold = st.slider(
+        "Ngưỡng Cosine Similarity (Fallback)",
+        min_value=0.0, max_value=1.0, value=0.48, step=0.01,
+        help="Nếu điểm Cosine gốc tốt nhất < ngưỡng này → chuyển sang PageIndex Fallback"
+    )
+    temperature = st.slider(
+        "Temperature (LLM)",
+        min_value=0.0, max_value=1.0, value=0.3, step=0.1,
+        help="Thấp = chính xác hơn, Cao = sáng tạo hơn"
+    )
+
+    st.divider()
     st.caption("**Kiến trúc RAG Pipeline:**")
     st.caption("Semantic + BM25 ➔ RRF Rerank ➔ PageIndex Fallback ➔ LLM Citation")
 
@@ -181,24 +194,25 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
-        if msg["role"] == "assistant" and "sources" in msg and msg["sources"]:
-            ret_src = msg.get("retrieval_source", "hybrid").upper()
-            with st.expander(f"📚 Nguồn tham khảo ({len(msg['sources'])} tài liệu | Phương thức: {ret_src})"):
-                for idx, src in enumerate(msg["sources"], 1):
-                    meta = src.get("metadata", {}) or {}
-                    doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
-                    doc_type = meta.get("type", "unknown")
-                    role = meta.get("customer_role", "both")
-                    score = src.get("score", 0.0)
-                    st.markdown(
-                        f"**[{idx}] {doc_name}** | "
-                        f"<span class='source-badge'>{doc_type.upper()}</span> "
-                        f"<span class='role-badge'>{role.upper()}</span> "
-                        f"| Điểm: `{score:.4f}`",
-                        unsafe_allow_html=True
-                    )
-                    st.text(src.get("content", "").strip()[:350] + "...")
-                    st.divider()
+    # Trích dẫn nguồn hiển thị NGOÀI khung chat, SAU câu trả lời
+    if msg["role"] == "assistant" and "sources" in msg and msg["sources"]:
+        ret_src = msg.get("retrieval_source", "hybrid").upper()
+        with st.expander(f"📚 Nguồn tham khảo trích dẫn ({len(msg['sources'])} tài liệu | Phương thức: {ret_src})"):
+            for idx, src in enumerate(msg["sources"], 1):
+                meta = src.get("metadata", {}) or {}
+                doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
+                doc_type = meta.get("type", "unknown")
+                role = meta.get("customer_role", "both")
+                score = src.get("score", 0.0)
+                st.markdown(
+                    f"**[{idx}] {doc_name}** | "
+                    f"<span class='source-badge'>{doc_type.upper()}</span> "
+                    f"<span class='role-badge'>{role.upper()}</span> "
+                    f"| Điểm: `{score:.4f}`",
+                    unsafe_allow_html=True
+                )
+                st.text(src.get("content", "").strip()[:350] + "...")
+                st.divider()
 
 # =============================================================================
 # CHAT INPUT & EXECUTION
@@ -211,6 +225,7 @@ if query:
     with st.chat_message("user", avatar="👤"):
         st.markdown(query)
 
+    # Câu trả lời hiển thị trước
     with st.chat_message("assistant", avatar="🛒"):
         with st.spinner("🔍 Đang tra cứu tài liệu và tổng hợp câu trả lời..."):
             answer = ""
@@ -230,24 +245,26 @@ if query:
 
             st.markdown(answer)
 
-            if sources:
-                ret_src = retrieval_source.upper()
-                with st.expander(f"📚 Nguồn tham khảo ({len(sources)} tài liệu | Phương thức: {ret_src})"):
-                    for idx, src in enumerate(sources, 1):
-                        meta = src.get("metadata", {}) or {}
-                        doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
-                        doc_type = meta.get("type", "unknown")
-                        role = meta.get("customer_role", "both")
-                        score = src.get("score", 0.0)
-                        st.markdown(
-                            f"**[{idx}] {doc_name}** | "
-                            f"<span class='source-badge'>{doc_type.upper()}</span> "
-                            f"<span class='role-badge'>{role.upper()}</span> "
-                            f"| Điểm: `{score:.4f}`",
-                            unsafe_allow_html=True
-                        )
-                        st.text(src.get("content", "").strip()[:350] + "...")
-                        st.divider()
+    # ── Tài liệu trích dẫn hiển thị SAU câu trả lời ──
+    if sources:
+        ret_src = retrieval_source.upper()
+        st.markdown("---")
+        st.markdown(
+            f"##### 📚 Tài liệu trích dẫn ({len(sources)} nguồn | Phương thức: {ret_src})",
+        )
+        for idx, src in enumerate(sources, 1):
+            meta = src.get("metadata", {}) or {}
+            doc_name = meta.get("source") or meta.get("document") or src.get("source") or f"Tài liệu {idx}"
+            doc_type = meta.get("type", "unknown")
+            role = meta.get("customer_role", "both")
+            score = src.get("score", 0.0)
+            with st.expander(f"[{idx}] {doc_name} — Điểm: {score:.4f}"):
+                st.markdown(
+                    f"<span class='source-badge'>{doc_type.upper()}</span> "
+                    f"<span class='role-badge'>{role.upper()}</span>",
+                    unsafe_allow_html=True
+                )
+                st.text(src.get("content", "").strip()[:500])
 
     st.session_state.messages.append({
         "role": "assistant",
