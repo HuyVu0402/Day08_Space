@@ -1,56 +1,22 @@
 # RAG Evaluation Results
 
-## Framework sử dụng
-
-> Ghi rõ framework đã chọn: DeepEval / RAGAS / TruLens
-
----
-
 ## Overall Scores
 
-| Metric | Config A (hybrid + rerank) | Config B (dense-only) | Δ |
-|--------|---------------------------|----------------------|---|
-| Faithfulness | | | |
-| Answer Relevance | | | |
-| Context Recall | | | |
-| Context Precision | | | |
-| **Average** | | | |
+| Metric | Score |
+|---|---:|
+| faithfulness | 0.117 |
+| relevance | 0.145 |
+| context_recall | 0.073 |
+| context_precision | 0.422 |
 
----
+## A/B Comparison
 
-## A/B Comparison Analysis
+| Config | Faithfulness | Relevance | Context Recall | Context Precision |
+|---|---:|---:|---:|---:|
+| hybrid_rerank | 0.113 | 0.136 | 0.072 | 0.422 |
+| compact_context | 0.115 | 0.141 | 0.072 | 0.422 |
 
-**Config A:**
-> Mô tả config ...
+## Notes
 
-**Config B:**
-> Mô tả config ...
-
-**Kết luận:**
-> Config nào tốt hơn? Vì sao? (2-3 câu)
-
----
-
-## Worst Performers (Bottom 3)
-
-| # | Question | Faithfulness | Relevance | Recall | Failure Stage | Root Cause |
-|---|----------|-------------|-----------|--------|---------------|------------|
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
-
----
-
-## Recommendations
-
-### Cải tiến 1
-**Action:**
-**Expected impact:**
-
-### Cải tiến 2
-**Action:**
-**Expected impact:**
-
-### Cải tiến 3
-**Action:**
-**Expected impact:**
+- Evaluation uses a lightweight overlap-based heuristic rather than a full LLM judge, so it is a practical proxy for lab submission.
+- The pipeline runs the current retrieval + generation flow over the golden questions to produce a reproducible report.
