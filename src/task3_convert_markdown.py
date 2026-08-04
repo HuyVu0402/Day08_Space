@@ -1,12 +1,8 @@
 """
-Task 3 — Convert toàn bộ file trong data/landing/ thành Markdown trong data/standardized/
+Task 3 — Convert toàn bộ file trong data/landing/ thành Markdown.
 
-Yêu cầu:
-    1. Scan toàn bộ file trong data/landing/legal/ (PDF, DOCX) và data/landing/news/ (JSON)
-    2. Sử dụng MarkItDown để convert PDF/DOCX.
-    3. Đọc JSON tin tức, trích xuất content_markdown và metadata.
-    4. Giữ lại thông tin metadata `customer_role` ('buyer', 'seller', 'both') trong header Markdown.
-    5. Lưu vào data/standardized/legal/ và data/standardized/news/
+Sử dụng MarkItDown của Microsoft:
+    https://github.com/microsoft/markitdown
 """
 
 import json
@@ -17,83 +13,61 @@ LANDING_DIR = Path(__file__).parent.parent / "data" / "landing"
 OUTPUT_DIR = Path(__file__).parent.parent / "data" / "standardized"
 
 
-def get_legal_roles_mapping() -> dict:
-    """Đọc file mapping document_roles.json nếu có."""
-    roles_file = LANDING_DIR / "legal" / "document_roles.json"
-    if roles_file.exists():
-        try:
-            return json.loads(roles_file.read_text(encoding="utf-8"))
-        except Exception as e:
-            print(f"[WARN] Error reading document_roles.json: {e}")
-    return {}
-
-
 def convert_legal_docs():
     """Convert PDF/DOCX files trong data/landing/legal/ sang markdown."""
     legal_dir = LANDING_DIR / "legal"
     output_dir = OUTPUT_DIR / "legal"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    roles_mapping = get_legal_roles_mapping()
+    roles_file = legal_dir / "document_roles.json"
+    roles_meta = {}
+    if roles_file.exists():
+        roles_meta = json.loads(roles_file.read_text(encoding="utf-8"))
+
     md = MarkItDown()
 
     for filepath in legal_dir.iterdir():
         if filepath.suffix.lower() in (".pdf", ".docx", ".doc"):
-            print(f"Converting legal doc: {filepath.name}")
+            print(f"Converting: {filepath.name}")
+            result = md.convert(str(filepath))
             output_path = output_dir / f"{filepath.stem}.md"
-            
-            # Use MarkItDown
-            try:
-                result = md.convert(str(filepath))
-                raw_text = result.text_content
-            except Exception as e:
-                print(f"  [WARN] MarkItDown fallback for {filepath.name}: {e}")
-                raw_text = f"Content extracted from {filepath.name}"
 
-            meta = roles_mapping.get(filepath.name, {})
-            customer_role = meta.get("customer_role", "both")
-            title = meta.get("title", filepath.stem.replace("_", " ").title())
-            url = meta.get("url", "N/A")
+            role_info = roles_meta.get(filepath.name, {})
+            customer_role = role_info.get("customer_role", "both")
+            doc_title = role_info.get("title", filepath.stem.replace("_", " ").title())
+            doc_url = role_info.get("url", "https://www.lazada.vn/")
 
-            # Header metadata for chunker/retriever
-            header = f"# {title}\n\n"
-            header += f"**Source:** {url}\n"
+            header = f"# {doc_title}\n\n"
+            header += f"**Source:** {doc_url}\n"
             header += f"**Customer Role:** {customer_role}\n"
             header += f"**Document Type:** legal\n\n---\n\n"
 
-            content = header + raw_text
+            content = header + result.text_content
             output_path.write_text(content, encoding="utf-8")
-            print(f"  [OK] Saved: {output_path.name} ({len(content)} chars, role={customer_role})")
+            print(f"  [OK] Saved: {output_path.name}")
 
 
 def convert_news_articles():
-    """Convert JSON articles trong data/landing/news/ sang markdown."""
+    """Convert JSON crawled articles trong data/landing/news/ sang markdown."""
     news_dir = LANDING_DIR / "news"
     output_dir = OUTPUT_DIR / "news"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     for filepath in news_dir.iterdir():
         if filepath.suffix.lower() == ".json":
-            print(f"Converting news article: {filepath.name}")
+            print(f"Converting: {filepath.name}")
+            data = json.loads(filepath.read_text(encoding="utf-8"))
             output_path = output_dir / f"{filepath.stem}.md"
 
-            data = json.loads(filepath.read_text(encoding="utf-8"))
-            title = data.get("title", "Unknown Title")
-            url = data.get("url", "N/A")
-            crawled = data.get("date_crawled", "N/A")
-            customer_role = data.get("customer_role", "both")
-            body = data.get("content_markdown", "")
-
-            # Header metadata
-            header = f"# {title}\n\n"
-            header += f"**Source:** {url}\n"
-            header += f"**Customer Role:** {customer_role}\n"
-            header += f"**Crawled:** {crawled}\n"
+            header = f"# {data.get('title', 'Unknown')}\n\n"
+            header += f"**Source:** {data.get('url', 'N/A')}\n"
+            header += f"**Crawled:** {data.get('date_crawled', 'N/A')}\n"
+            header += f"**Customer Role:** {data.get('customer_role', 'both')}\n"
             header += f"**Document Type:** news\n\n---\n\n"
 
-            content = header + body
+            content = header + data.get("content_markdown", "")
             output_path.write_text(content, encoding="utf-8")
-            print(f"  [OK] Saved: {output_path.name} ({len(content)} chars, role={customer_role})")
+            print(f"  [OK] Saved: {output_path.name}")
 
 
 def convert_all():
@@ -108,7 +82,7 @@ def convert_all():
     print("\n--- News Articles ---")
     convert_news_articles()
 
-    print("\n[OK] Task 3 completed! Output directory:", OUTPUT_DIR)
+    print("\n[OK] Done! Output tai:", OUTPUT_DIR)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
 # Câu hỏi thường gặp về dịch vụ Mua trước Trả sau LazPayLater Lazada
 
 **Source:** https://pages.lazada.vn/wow/gcp/lazada/channel/vn/lazpaylater/cau-hoi-thuong-gap
+**Crawled:** 2026-08-04T14:52:43.309868
 **Customer Role:** buyer
-**Crawled:** 2026-08-04T14:27:46.319957
 **Document Type:** news
 
 ---

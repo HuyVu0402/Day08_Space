@@ -1,8 +1,8 @@
 # Bảng biểu phí dịch vụ và thanh toán dành cho Nhà bán hàng Lazada năm 2026
 
 **Source:** https://sellercenter.lazada.vn/help/fee-structure-2026.html
+**Crawled:** 2026-08-04T14:52:43.310864
 **Customer Role:** seller
-**Crawled:** 2026-08-04T14:27:46.330264
 **Document Type:** news
 
 ---

@@ -2,12 +2,13 @@
 Task 1 — Thu thập văn bản chính sách thương mại điện tử / hỗ trợ khách hàng (Lazada).
 
 Nhiệm vụ:
-    1. Tạo ít nhất 3-4 file PDF chính sách Lazada vào data/landing/legal/
+    1. Tạo 4 file PDF chính sách Lazada bằng Tiếng Việt có dấu chuẩn vào data/landing/legal/
     2. Gắn metadata `customer_role` ('buyer', 'seller', hoặc 'both') cho từng tài liệu.
     3. Lưu thông tin metadata mapping vào data/landing/legal/document_roles.json
 """
 
 import json
+import os
 from pathlib import Path
 from fpdf import FPDF
 
@@ -16,127 +17,127 @@ DATA_DIR = Path(__file__).parent.parent / "data" / "landing" / "legal"
 LEGAL_DOCUMENTS = [
     {
         "filename": "lazada_dieu_khoan_su_dung.pdf",
-        "title": "Dieu Khoan Su Dung Lazada Vietnam (Terms of Use)",
+        "title": "Điều Khoản Sử Dụng Lazada Việt Nam (Terms of Use)",
         "customer_role": "both",
         "url": "https://www.lazada.vn/terms-of-use/",
         "sections": [
             {
-                "heading": "1. Quy dinh chung ve Tai khoan va Dich vu",
+                "heading": "1. Quy định chung về Tài khoản và Dịch vụ",
                 "content": (
-                    "Quy dinh nay ap dung cho toan bo nguoi dung (bao gom Nguoi mua va Nguoi ban) khi truy cap "
-                    "va su dung nen tang thuong mai dien tu Lazada Vietnam. Nguoi dung phai tu bao mat thong tin "
-                    "tai khoan, mat khau va chiu trach nhiem cho moi hoat dong dien ra duoi tai khoan cua minh. "
-                    "Lazada co quyen tam khoa hoac hoan tac tai khoan neu phat hien hanh vi gian lan, vi pham "
-                    "phap luat hoac vi pham dieu khoan su dung cua san."
+                    "Quy định này áp dụng cho toàn bộ người dùng (bao gồm Người mua và Người bán) khi truy cập "
+                    "và sử dụng nền tảng thương mại điện tử Lazada Việt Nam. Người dùng phải tự bảo mật thông tin "
+                    "tài khoản, mật khẩu và chịu trách nhiệm cho mọi hoạt động diễn ra dưới tài khoản của mình. "
+                    "Lazada có quyền tạm khóa hoặc hoàn tác tài khoản nếu phát hiện hành vi gian lận, vi phạm "
+                    "pháp luật hoặc vi phạm điều khoản sử dụng của sàn."
                 )
             },
             {
-                "heading": "2. Quyen so huu tri tue va Quy tac ung xu",
+                "heading": "2. Quyền sở hữu trí tuệ và Quy tắc ứng xử",
                 "content": (
-                    "Toan bo noi dung, logo, thuong hieu, hinh anh va ma nguon tren Lazada thuoc quyen so huu cua "
-                    "Lazada Group. Nghiem cam hanh vi sao chep, phat hanh lai hoac khai thai thuong mai khi chua co "
-                    "su dong y bang van ban. Nguoi dung khong duoc dang tai cac noi dung xuc pham, gia moc hoac "
-                    "phat tan ma doc tren nen tang."
+                    "Toàn bộ nội dung, logo, thương hiệu, hình ảnh và mã nguồn trên Lazada thuộc quyền sở hữu của "
+                    "Lazada Group. Nghiêm cấm hành vi sao chép, phát hành lại hoặc khai thác thương mại khi chưa có "
+                    "sự đồng ý bằng văn bản. Người dùng không được đăng tải các nội dung xúc phạm, giả mạo hoặc "
+                    "phát tán mã độc trên nền tảng."
                 )
             },
             {
-                "heading": "3. Giai quyet tranh chap va Gioi han trach nhiem",
+                "heading": "3. Giải quyết tranh chấp và Giới hạn trách nhiệm",
                 "content": (
-                    "Lazada dong vai tro trung gian ket noi Nguoi mua va Nguoi ban. Moi tranh chap phat sinh se duoc "
-                    "uu tien hoa giai dua tren quy dinh cua phap luat Vietnam va chinh sach cua Lazada. Lazada khong "
-                    "chiu trach nhiem cho cac thiet hai gian tiep phat sinh tu viec giat doan dich vu hoac loi tu phia "
-                    "nha cung cap dich vu ben thu ba."
+                    "Lazada đóng vai trò trung gian kết nối Người mua và Người bán. Mọi tranh chấp phát sinh sẽ được "
+                    "ưu tiên hòa giải dựa trên quy định của pháp luật Việt Nam và chính sách của Lazada. Lazada không "
+                    "chịu trách nhiệm cho các thiệt hại gián tiếp phát sinh từ việc gián đoạn dịch vụ hoặc lỗi từ phía "
+                    "nhà cung cấp dịch vụ bên thứ ba."
                 )
             }
         ]
     },
     {
         "filename": "lazada_chinh_sach_doi_tra_hoan_tien.pdf",
-        "title": "Chinh Sach Doi Tra va Hoan Tien Lazada Vietnam (Return & Refund Policy)",
+        "title": "Chính Sách Đổi Trả và Hoàn Tiền Lazada Việt Nam (Return & Refund Policy)",
         "customer_role": "buyer",
         "url": "https://www.lazada.vn/helpcenter/returns-refunds/",
         "sections": [
             {
-                "heading": "1. Thoi han va Dieu kien Tra hang / Hoan tien",
+                "heading": "1. Thời hạn và Điều kiện Trả hàng / Hoàn tiền",
                 "content": (
-                    "Nguoi mua co quyen gui yeu cau Tra hang / Hoan tien trong vong 30 ngay doi voi san pham LazMall "
-                    "va Choice, va trong vong 15 ngay doi voi san pham tu Nha ban hang thuong tinh tu ngay nhan hang. "
-                    "San pham doi tra phai con nguyen tem mac, bao boi ban dau, chua qua su dung va co day du phu kien "
-                    "kem theo. Lazada ho tro tra hang voi ly do Doi y doi voi cac gian hang du dieu kien."
+                    "Người mua có quyền gửi yêu cầu Trả hàng / Hoàn tiền trong vòng 30 ngày đối với sản phẩm LazMall "
+                    "và Choice, và trong vòng 15 ngày đối với sản phẩm từ Nhà bán hàng thường tính từ ngày nhận hàng. "
+                    "Sản phẩm đổi trả phải còn nguyên tem mác, bao bì ban đầu, chưa qua sử dụng và có đầy đủ phụ kiện "
+                    "kèm theo. Lazada hỗ trợ trả hàng với lý do Đổi ý đối với các gian hàng đủ điều kiện."
                 )
             },
             {
-                "heading": "2. Quy trinh gui san pham va Ban giao don vi van chuyen",
+                "heading": "2. Quy trình gửi sản phẩm và Bàn giao đơn vị vận chuyển",
                 "content": (
-                    "Sau khi yeu cau Tra hang duoc chap nhan tren ung dung Lazada, Nguoi mua chon phuong thuc gui hang: "
-                    "Thu gom tai nha (Pick-up) hoac Gui tai buu cuc (Drop-off). Nguoi mua can dong goi san pham can than, "
-                    "dan ma van don doi tra va ban giao cho don vi van chuyen trong vong 3 ngay lam viec. Chi phi van "
-                    "chuyen doi tra se duoc Lazada ho tro neu yeu cau hop le."
+                    "Sau khi yêu cầu Trả hàng được chấp nhận trên ứng dụng Lazada, Người mua chọn phương thức gửi hàng: "
+                    "Thu gom tại nhà (Pick-up) hoặc Gửi tại bưu cục (Drop-off). Người mua cần đóng gói sản phẩm cẩn thận, "
+                    "dán mã vận đơn đổi trả và bàn giao cho đơn vị vận chuyển trong vòng 3 ngày làm việc. Chi phí vận "
+                    "chuyển đổi trả sẽ được Lazada hỗ trợ nếu yêu cầu hợp lệ."
                 )
             },
             {
-                "heading": "3. Phuong thuc va Thoi gian Xuly Hoan tien",
+                "heading": "3. Phương thức và Thời gian Xử lý Hoàn tiền",
                 "content": (
-                    "Sau khi Nha ban hang hoac Kho Lazada nhan va kiem tra hang tra lai thanh cong, tien hoan se duoc "
-                    "chuyen den Nguoi mua. Cac phuong thuc hoan tien bao gom: Vi LazPayLater (hoan lai han muc ngay), "
-                    "The tin dung/ghi no (3-5 ngay lam viec), Vi dien tu ZaloPay/Momo (1-2 ngay lam viec), hoac "
-                    "Chuyen khoan ngan hang (3-7 ngay lam viec)."
+                    "Sau khi Nhà bán hàng hoặc Kho Lazada nhận và kiểm tra hàng trả lại thành công, tiền hoàn sẽ được "
+                    "chuyển đến Người mua. Các phương thức hoàn tiền bao gồm: Ví LazPayLater (hoàn lại hạn mức ngay), "
+                    "Thẻ tín dụng/ghi nợ (3-5 ngày làm việc), Ví điện tử ZaloPay/Momo (1-2 ngày làm việc), hoặc "
+                    "Chuyển khoản ngân hàng (3-7 ngày làm việc)."
                 )
             }
         ]
     },
     {
         "filename": "lazada_quy_dinh_dang_ban_nha_ban_hang.pdf",
-        "title": "Quy Dinh Dang Ban va Phi San Danh cho Nha Ban Hang Lazada (Seller Policy)",
+        "title": "Quy Định Đăng Bán và Phí Sàn Dành cho Nhà Bán Hàng Lazada (Seller Policy)",
         "customer_role": "seller",
         "url": "https://sellercenter.lazada.vn/policy/",
         "sections": [
             {
-                "heading": "1. Danh muc San pham Cam dang ban va Quy dinh Hang hoa",
+                "heading": "1. Danh mục Sản phẩm Cấm đăng bán và Quy định Hàng hóa",
                 "content": (
-                    "Nha ban hang khong duoc dang ban hang gia, hang nhai, hang vi pham quyen so huu tri tue, "
-                    "vu khi, chat no, thuoc kich thich, thuc pham khong ro nguon goc va cac mat hang bi cam theo quy dinh "
-                    "phap luat Vietnam. Vi pham se bi xoa san pham, tru diem uy tin (NC point) hoac khoa gian hang vinh vien."
+                    "Nhà bán hàng không được đăng bán hàng giả, hàng nhái, hàng vi phạm quyền sở hữu trí tuệ, "
+                    "vũ khí, chất nổ, thuốc kích thích, thực phẩm không rõ nguồn gốc và các mặt hàng bị cấm theo quy định "
+                    "pháp luật Việt Nam. Vi phạm sẽ bị xóa sản phẩm, trừ điểm uy tín (NC point) hoặc khóa gian hàng vĩnh viễn."
                 )
             },
             {
-                "heading": "2. Bieu phi Dich vu va Phi Thanh toan cho Nha ban hang",
+                "heading": "2. Biểu phí Dịch vụ và Phí Thanh toán cho Nhà bán hàng",
                 "content": (
-                    "Nha ban hang chiu cac khoan phi bao gom: Phi thanh toan co dinh (2.2% gia tri don hang), Phi hoa hong "
-                    "san (tuy theo danh muc nganh hang tu 2% den 8%), va Phi tham gia cac chuong trinh uu dai nhu "
-                    "Freeship Max, Voucher Max. Doanh thu thuc nhan se duoc Lazada doi sot va thanh toan hang tuan."
+                    "Nhà bán hàng chịu các khoản phí bao gồm: Phí thanh toán cố định (2.2% giá trị đơn hàng), Phí hoa hồng "
+                    "sàn (tùy theo danh mục ngành hàng từ 2% đến 8%), và Phí tham gia các chương trình ưu đãi như "
+                    "Freeship Max, Voucher Max. Doanh thu thực nhận sẽ được Lazada đối soát và thanh toán hàng tuần."
                 )
             },
             {
-                "heading": "3. Chi so Van hanh va Quy trinh Xu ly Don hang (SLA)",
+                "heading": "3. Chỉ số Vận hành và Quy trình Xử lý Đơn hàng (SLA)",
                 "content": (
-                    "Nha ban hang phai xac nhan va dong goi don hang trong vong 24 gio ke tu khi don hang duoc tao. "
-                    "Ty le huy don do loi Nha ban hang khong duoc vuot qua 1%. Neu ty le giao hang tre hoac huy don cao, "
-                    "gian hang se bi giam luong truy cap (search traffic) va bi han che tham gia cac campaign lon."
+                    "Nhà bán hàng phải xác nhận và đóng gói đơn hàng trong vòng 24 giờ kể từ khi đơn hàng được tạo. "
+                    "Tỷ lệ hủy đơn do lỗi Nhà bán hàng không được vượt quá 1%. Nếu tỷ lệ giao hàng trễ hoặc hủy đơn cao, "
+                    "gian hàng sẽ bị giảm lượng truy cập (search traffic) và bị hạn chế tham gia các campaign lớn."
                 )
             }
         ]
     },
     {
         "filename": "lazada_dieu_khoan_lazpaylater.pdf",
-        "title": "Dieu Khoan va Quy Dinh San Pham LazPayLater (LazPayLater Terms)",
+        "title": "Điều Khoản và Quy Định Sản Phẩm LazPayLater (LazPayLater Terms)",
         "customer_role": "buyer",
         "url": "https://pages.lazada.vn/wow/gcp/lazada/channel/vn/lazpaylater/cau-hoi-thuong-gap",
         "sections": [
             {
-                "heading": "1. Gioi thieu va Han muc Tinh dung LazPayLater",
+                "heading": "1. Giới thiệu và Hạn mức Tín dụng LazPayLater",
                 "content": (
-                    "LazPayLater la dich vu Mua truoc Tra sau hop tac giua Lazada va ngan hang doi tac. Khach hang hop le "
-                    "co the duoc cap han muc tinh dung len den 10.000.000 VND de mua sam tren Lazada va tra sau vao ky thanh "
-                    "toan tiep theo hoac trag gop nhieu ky (3, 6, 12 thang)."
+                    "LazPayLater là dịch vụ Mua trước Trả sau hợp tác giữa Lazada và ngân hàng đối tác. Khách hàng hợp lệ "
+                    "có thể được cấp hạn mức tín dụng lên đến 10.000.000 VNĐ để mua sắm trên Lazada và trả sau vào kỳ thanh "
+                    "toán tiếp theo hoặc trả góp nhiều kỳ (3, 6, 12 tháng)."
                 )
             },
             {
-                "heading": "2. Thanh toan Du no va Phi cham tro",
+                "heading": "2. Thanh toán Dư nợ và Phí chậm trả",
                 "content": (
-                    "Sao ke LazPayLater duoc chot vao ngay 25 hang thang va thoi han thanh toan la ngay 5 cua thang ke tiep. "
-                    "Khach hang co the thanh toan du no qua Vi ZaloPay, Chuyen khoan ngan hang hoac The ATM noi dia. Neu thanh "
-                    "toan tre han, phi phat cham tra se duoc tinh theo quy dinh 0.1%/ngay tren so tien qua han."
+                    "Sao kê LazPayLater được chốt vào ngày 25 hàng tháng và thời hạn thanh toán là ngày 5 của tháng kế tiếp. "
+                    "Khách hàng có thể thanh toán dư nợ qua Ví ZaloPay, Chuyển khoản ngân hàng hoặc Thẻ ATM nội địa. Nếu thanh "
+                    "toán trễ hạn, phí phạt chậm trả sẽ được tính theo quy định 0.1%/ngày trên số tiền quá hạn."
                 )
             }
         ]
@@ -151,31 +152,50 @@ def setup_directory():
 
 
 def create_pdf(doc_info: dict) -> Path:
-    """Tạo file PDF từ thông tin document."""
+    """Tạo file PDF từ thông tin document hỗ trợ tiếng Việt UTF-8."""
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
-    
+
+    # Load Windows Arial font for UTF-8 Vietnamese support
+    font_path = r"C:\Windows\Fonts\arial.ttf"
+    font_bold_path = r"C:\Windows\Fonts\arialbd.ttf"
+    font_italic_path = r"C:\Windows\Fonts\ariali.ttf"
+
+    use_custom_font = False
+    if os.path.exists(font_path):
+        try:
+            pdf.add_font("ArialVN", "", font_path)
+            if os.path.exists(font_bold_path):
+                pdf.add_font("ArialVN", "B", font_bold_path)
+            if os.path.exists(font_italic_path):
+                pdf.add_font("ArialVN", "I", font_italic_path)
+            use_custom_font = True
+        except Exception:
+            use_custom_font = False
+
+    font_family = "ArialVN" if use_custom_font else "Helvetica"
+
     # Header title
-    pdf.set_font("Helvetica", style="B", size=16)
+    pdf.set_font(font_family, style="B" if use_custom_font else "B", size=15)
     pdf.cell(0, 10, doc_info["title"], new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.ln(5)
-    
+
     # Metadata info inside PDF
-    pdf.set_font("Helvetica", style="I", size=10)
+    pdf.set_font(font_family, style="I" if use_custom_font else "I", size=10)
     pdf.cell(0, 6, f"URL Source: {doc_info['url']}", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, f"Customer Role: {doc_info['customer_role']}", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
-    
+
     # Sections
     for sec in doc_info["sections"]:
-        pdf.set_font("Helvetica", style="B", size=12)
+        pdf.set_font(font_family, style="B" if use_custom_font else "B", size=12)
         pdf.cell(0, 8, sec["heading"], new_x="LMARGIN", new_y="NEXT")
-        
-        pdf.set_font("Helvetica", size=10)
+
+        pdf.set_font(font_family, size=10)
         pdf.multi_cell(0, 6, sec["content"])
         pdf.ln(4)
-        
+
     filepath = DATA_DIR / doc_info["filename"]
     pdf.output(str(filepath))
     print(f"  [OK] Da tao PDF: {filepath.name} ({filepath.stat().st_size} bytes)")
@@ -185,9 +205,9 @@ def create_pdf(doc_info: dict) -> Path:
 def generate_legal_docs():
     """Tạo tất cả văn bản chính sách pháp lý Lazada và lưu metadata mapping."""
     setup_directory()
-    
+
     roles_mapping = {}
-    print("\n--- Task 1: Generating Lazada Legal Documents ---")
+    print("\n--- Task 1: Generating Lazada Legal Documents (Accented Vietnamese) ---")
     for doc in LEGAL_DOCUMENTS:
         filepath = create_pdf(doc)
         roles_mapping[doc["filename"]] = {
@@ -196,8 +216,7 @@ def generate_legal_docs():
             "url": doc["url"],
             "size_bytes": filepath.stat().st_size
         }
-        
-    # Save mapping file
+
     mapping_file = DATA_DIR / "document_roles.json"
     mapping_file.write_text(json.dumps(roles_mapping, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[OK] Saved document roles mapping to: {mapping_file}")

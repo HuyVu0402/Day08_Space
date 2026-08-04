@@ -1,8 +1,8 @@
 # Hướng dẫn liên hệ trợ lý ảo CLEO và Tổng đài Chăm sóc khách hàng Lazada
 
 **Source:** https://www.lazada.vn/helpcenter/contact-cleo-support.html
+**Crawled:** 2026-08-04T14:52:43.312863
 **Customer Role:** buyer
-**Crawled:** 2026-08-04T14:27:46.345983
 **Document Type:** news
 
 ---

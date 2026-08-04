@@ -1,4 +1,4 @@
-# Quy Dinh Dang Ban va Phi San Danh cho Nha Ban Hang Lazada (Seller Policy)
+# Quy Định Đăng Bán và Phí Sàn Dành cho Nhà Bán Hàng Lazada (Seller Policy)
 
 **Source:** https://sellercenter.lazada.vn/policy/
 **Customer Role:** seller
@@ -6,33 +6,33 @@
 
 ---
 
-Quy Dinh Dang Ban va Phi San Danh cho Nha Ban Hang Lazada (Seller Policy)
+Quy Định Đăng Bán và Phí Sàn Dành cho Nhà Bán Hàng Lazada (Seller Policy)
 
 URL Source: https://sellercenter.lazada.vn/policy/
 
 Customer Role: seller
 
-1. Danh muc San pham Cam dang ban va Quy dinh Hang hoa
+1. Danh mục Sản phẩm Cấm đăng bán và Quy định Hàng hóa
 
-Nha ban hang khong duoc dang ban hang gia, hang nhai, hang vi pham quyen so huu tri tue, vu khi, chat no, thuoc kich
+Nhà bán hàng không được đăng bán hàng giả, hàng nhái, hàng vi phạm quyền sở hữu trí tuệ, vũ khí, chất nổ, thuốc
 
-thich, thuc pham khong ro nguon goc va cac mat hang bi cam theo quy dinh phap luat Vietnam. Vi pham se bi xoa san
+kích thích, thực phẩm không rõ nguồn gốc và các mặt hàng bị cấm theo quy định pháp luật Việt Nam. Vi phạm sẽ bị xóa
 
-pham, tru diem uy tin (NC point) hoac khoa gian hang vinh vien.
+sản phẩm, trừ điểm uy tín (NC point) hoặc khóa gian hàng vĩnh viễn.
 
-2. Bieu phi Dich vu va Phi Thanh toan cho Nha ban hang
+2. Biểu phí Dịch vụ và Phí Thanh toán cho Nhà bán hàng
 
-Nha ban hang chiu cac khoan phi bao gom: Phi thanh toan co dinh (2.2% gia tri don hang), Phi hoa hong san (tuy theo
+Nhà bán hàng chịu các khoản phí bao gồm: Phí thanh toán cố định (2.2% giá trị đơn hàng), Phí hoa hồng sàn (tùy theo
 
-danh muc nganh hang tu 2% den 8%), va Phi tham gia cac chuong trinh uu dai nhu Freeship Max, Voucher Max. Doanh
+danh  mục  ngành  hàng  từ  2%  đến  8%),  và  Phí  tham  gia  các  chương  trình  ưu  đãi  như  Freeship  Max,  Voucher  Max.
 
-thu thuc nhan se duoc Lazada doi sot va thanh toan hang tuan.
+Doanh thu thực nhận sẽ được Lazada đối soát và thanh toán hàng tuần.
 
-3. Chi so Van hanh va Quy trinh Xu ly Don hang (SLA)
+3. Chỉ số Vận hành và Quy trình Xử lý Đơn hàng (SLA)
 
-Nha ban hang phai xac nhan va dong goi don hang trong vong 24 gio ke tu khi don hang duoc tao. Ty le huy don do loi
+Nhà bán hàng phải xác nhận và đóng gói đơn hàng trong vòng 24 giờ kể từ khi đơn hàng được tạo. Tỷ lệ hủy đơn do lỗi
 
-Nha ban hang khong duoc vuot qua 1%. Neu ty le giao hang tre hoac huy don cao, gian hang se bi giam luong truy cap
+Nhà bán hàng không được vượt quá 1%. Nếu tỷ lệ giao hàng trễ hoặc hủy đơn cao, gian hàng sẽ bị giảm lượng truy
 
-(search traffic) va bi han che tham gia cac campaign lon.
+cập (search traffic) và bị hạn chế tham gia các campaign lớn.
 

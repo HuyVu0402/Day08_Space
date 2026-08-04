@@ -1,4 +1,4 @@
-# Dieu Khoan va Quy Dinh San Pham LazPayLater (LazPayLater Terms)
+# Điều Khoản và Quy Định Sản Phẩm LazPayLater (LazPayLater Terms)
 
 **Source:** https://pages.lazada.vn/wow/gcp/lazada/channel/vn/lazpaylater/cau-hoi-thuong-gap
 **Customer Role:** buyer
@@ -6,25 +6,25 @@
 
 ---
 
-Dieu Khoan va Quy Dinh San Pham LazPayLater (LazPayLater Terms)
+Điều Khoản và Quy Định Sản Phẩm LazPayLater (LazPayLater Terms)
 
 URL Source: https://pages.lazada.vn/wow/gcp/lazada/channel/vn/lazpaylater/cau-hoi-thuong-gap
 
 Customer Role: buyer
 
-1. Gioi thieu va Han muc Tinh dung LazPayLater
+1. Giới thiệu và Hạn mức Tín dụng LazPayLater
 
-LazPayLater la dich vu Mua truoc Tra sau hop tac giua Lazada va ngan hang doi tac. Khach hang hop le co the duoc
+LazPayLater là dịch vụ Mua trước Trả sau hợp tác giữa Lazada và ngân hàng đối tác. Khách hàng hợp lệ có thể được
 
-cap han muc tinh dung len den 10.000.000 VND de mua sam tren Lazada va tra sau vao ky thanh toan tiep theo hoac
+cấp hạn mức tín dụng lên đến 10.000.000 VNĐ để mua sắm trên Lazada và trả sau vào kỳ thanh toán tiếp theo hoặc trả
 
-trag gop nhieu ky (3, 6, 12 thang).
+góp nhiều kỳ (3, 6, 12 tháng).
 
-2. Thanh toan Du no va Phi cham tro
+2. Thanh toán Dư nợ và Phí chậm trả
 
-Sao ke LazPayLater duoc chot vao ngay 25 hang thang va thoi han thanh toan la ngay 5 cua thang ke tiep. Khach hang
+Sao kê LazPayLater được chốt vào ngày 25 hàng tháng và thời hạn thanh toán là ngày 5 của tháng kế tiếp. Khách hàng
 
-co the thanh toan du no qua Vi ZaloPay, Chuyen khoan ngan hang hoac The ATM noi dia. Neu thanh toan tre han, phi
+có thể thanh toán dư nợ qua Ví ZaloPay, Chuyển khoản ngân hàng hoặc Thẻ ATM nội địa. Nếu thanh toán trễ hạn, phí
 
-phat cham tra se duoc tinh theo quy dinh 0.1%/ngay tren so tien qua han.
+phạt chậm trả sẽ được tính theo quy định 0.1%/ngày trên số tiền quá hạn.
 

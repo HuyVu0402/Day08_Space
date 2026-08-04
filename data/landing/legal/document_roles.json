@@ -1,26 +1,26 @@
 {
   "lazada_dieu_khoan_su_dung.pdf": {
-    "title": "Dieu Khoan Su Dung Lazada Vietnam (Terms of Use)",
+    "title": "Điều Khoản Sử Dụng Lazada Việt Nam (Terms of Use)",
     "customer_role": "both",
     "url": "https://www.lazada.vn/terms-of-use/",
-    "size_bytes": 2063
+    "size_bytes": 64676
   },
   "lazada_chinh_sach_doi_tra_hoan_tien.pdf": {
-    "title": "Chinh Sach Doi Tra va Hoan Tien Lazada Vietnam (Return & Refund Policy)",
+    "title": "Chính Sách Đổi Trả và Hoàn Tiền Lazada Việt Nam (Return & Refund Policy)",
     "customer_role": "buyer",
     "url": "https://www.lazada.vn/helpcenter/returns-refunds/",
-    "size_bytes": 2107
+    "size_bytes": 69437
   },
   "lazada_quy_dinh_dang_ban_nha_ban_hang.pdf": {
-    "title": "Quy Dinh Dang Ban va Phi San Danh cho Nha Ban Hang Lazada (Seller Policy)",
+    "title": "Quy Định Đăng Bán và Phí Sàn Dành cho Nhà Bán Hàng Lazada (Seller Policy)",
     "customer_role": "seller",
     "url": "https://sellercenter.lazada.vn/policy/",
-    "size_bytes": 2032
+    "size_bytes": 66247
   },
   "lazada_dieu_khoan_lazpaylater.pdf": {
-    "title": "Dieu Khoan va Quy Dinh San Pham LazPayLater (LazPayLater Terms)",
+    "title": "Điều Khoản và Quy Định Sản Phẩm LazPayLater (LazPayLater Terms)",
     "customer_role": "buyer",
     "url": "https://pages.lazada.vn/wow/gcp/lazada/channel/vn/lazpaylater/cau-hoi-thuong-gap",
-    "size_bytes": 1821
+    "size_bytes": 65104
   }
 }

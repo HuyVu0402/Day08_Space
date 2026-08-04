@@ -1,8 +1,8 @@
 # Hướng dẫn tra cứu hành trình đơn hàng và thời gian giao hàng Lazada
 
 **Source:** https://www.lazada.vn/helpcenter/track-your-order-status.html
+**Crawled:** 2026-08-04T14:52:43.310864
 **Customer Role:** buyer
-**Crawled:** 2026-08-04T14:27:46.319957
 **Document Type:** news
 
 ---
