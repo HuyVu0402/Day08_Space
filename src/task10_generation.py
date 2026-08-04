@@ -14,11 +14,26 @@ Base URL: "https://openrouter.ai/api/v1", dùng chung interface với OpenAI SDK
 """
 
 import os
+import sys
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from .task9_retrieval_pipeline import retrieve
+PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+try:
+    from .task9_retrieval_pipeline import retrieve
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from src.task9_retrieval_pipeline import retrieve
+
+try:
+    from openai import OpenAI
+except Exception:  # pragma: no cover - optional dependency
+    OpenAI = None
 
 
 # =============================================================================
@@ -38,7 +53,7 @@ TOP_P = 0.9
 TEMPERATURE = 0.3
 
 # TODO: Chọn LLM model (OpenRouter model ID)
-LLM_MODEL = "openai/gpt-4o-mini"  # hoặc model ":free" nếu chưa có credit
+LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-4o-mini")
 
 
 # =============================================================================
@@ -77,15 +92,15 @@ def reorder_for_llm(chunks: list[dict]) -> list[dict]:
     Returns:
         List reordered để maximize LLM attention.
     """
-    # TODO: Implement reordering
-    #
-    # if len(chunks) <= 2:
-    #     return chunks
-    #
-    # front = chunks[::2]   # index 0, 2, 4 -> đặt ở đầu
-    # back = chunks[1::2]   # index 1, 3    -> đặt ở cuối (reversed)
-    # return front + back[::-1]
-    raise NotImplementedError("Implement reorder_for_llm")
+    if not chunks:
+        return []
+
+    if len(chunks) <= 2:
+        return list(chunks)
+
+    front = [chunks[i] for i in range(0, len(chunks), 2)]
+    back = [chunks[i] for i in range(1, len(chunks), 2)][::-1]
+    return front + back
 
 
 # =============================================================================
@@ -103,25 +118,33 @@ def format_context(chunks: list[dict]) -> str:
     Returns:
         Formatted context string.
     """
-    # TODO: Implement context formatting
-    #
-    # context_parts = []
-    # for i, chunk in enumerate(chunks, 1):
-    #     source = chunk.get("metadata", {}).get("source", f"Source {i}")
-    #     doc_type = chunk.get("metadata", {}).get("type", "unknown")
-    #     context_parts.append(
-    #         f"[Document {i} | Source: {source} | Type: {doc_type}]\n"
-    #         f"{chunk['content']}\n"
-    #     )
-    # return "\n---\n".join(context_parts)
-    raise NotImplementedError("Implement format_context")
+    if not chunks:
+        return ""
+
+    context_parts = []
+    for i, chunk in enumerate(chunks, 1):
+        metadata = chunk.get("metadata", {}) or {}
+        source = (
+            metadata.get("source")
+            or metadata.get("document")
+            or chunk.get("source")
+            or f"Source {i}"
+        )
+        doc_type = metadata.get("type", "unknown")
+        content = chunk.get("content", "").strip()
+        if not content:
+            continue
+        context_parts.append(
+            f"[Document {i} | Source: {source} | Type: {doc_type}]\n{content}"
+        )
+    return "\n---\n".join(context_parts)
 
 
 # =============================================================================
 # GENERATION
 # =============================================================================
 
-def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
+def generate_with_citation(query: str, top_k: int = TOP_K, customer_role: str | None = None) -> dict:
     """
     End-to-end RAG generation có citation.
 
@@ -143,44 +166,63 @@ def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
             'retrieval_source': str  # 'hybrid' hoặc 'pageindex'
         }
     """
-    # TODO: Implement generation pipeline
-    #
-    # # Step 1: Retrieve
-    # chunks = retrieve(query, top_k=top_k)
-    #
-    # # Step 2: Reorder
-    # reordered = reorder_for_llm(chunks)
-    #
-    # # Step 3: Format context
-    # context = format_context(reordered)
-    #
-    # # Step 4: Build prompt
-    # user_message = f"""Context:\n{context}\n\n---\n\nQuestion: {query}"""
-    #
-    # # Step 5: Call LLM (OpenRouter — OpenAI-compatible API)
-    # from openai import OpenAI
-    # api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-    # client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
-    #
-    # response = client.chat.completions.create(
-    #     model=LLM_MODEL,
-    #     messages=[
-    #         {"role": "system", "content": SYSTEM_PROMPT},
-    #         {"role": "user", "content": user_message}
-    #     ],
-    #     temperature=TEMPERATURE,
-    #     top_p=TOP_P,
-    # )
-    #
-    # answer = response.choices[0].message.content
-    #
-    # # Step 6: Return
-    # return {
-    #     "answer": answer,
-    #     "sources": chunks,
-    #     "retrieval_source": chunks[0].get("source", "hybrid") if chunks else "none"
-    # }
-    raise NotImplementedError("Implement generate_with_citation")
+    chunks = retrieve(query, top_k=top_k)
+    reordered = reorder_for_llm(chunks)
+    context = format_context(reordered)
+
+    if not context:
+        return {
+            "answer": "Tôi không thể xác minh thông tin này từ nguồn hiện có.",
+            "sources": chunks,
+            "retrieval_source": chunks[0].get("source", "none") if chunks else "none",
+        }
+
+    role_hint = f"\nVai trò khách hàng: {customer_role}" if customer_role else ""
+    user_message = (
+        f"Context:\n{context}\n\n---\n\nQuestion: {query}{role_hint}\n\n"
+        "Hãy trả lời bằng tiếng Việt, ngắn gọn, rõ ràng và luôn có chú thích nguồn như [Tên nguồn]."
+    )
+
+    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+    if api_key and OpenAI is not None:
+        try:
+            client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
+            response = client.chat.completions.create(
+                model=LLM_MODEL,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=TEMPERATURE,
+                top_p=TOP_P,
+            )
+            answer = response.choices[0].message.content or ""
+            if answer.strip():
+                return {
+                    "answer": answer.strip(),
+                    "sources": chunks,
+                    "retrieval_source": chunks[0].get("source", "hybrid") if chunks else "none",
+                }
+        except Exception as exc:  # pragma: no cover - network/external service
+            print(f"[Warning] LLM call failed: {exc}")
+
+    # Fallback: tạo câu trả lời dựa trên context nếu không thể gọi LLM
+    top_sources = reordered[:3]
+    if top_sources:
+        first_source = top_sources[0]
+        source_label = first_source.get("metadata", {}).get("source") or first_source.get("source") or "nguồn tham khảo"
+        answer = (
+            f"Dựa trên các tài liệu tìm được, thông tin gần nhất là: {top_sources[0].get('content', '')[:300]}... "
+            f"[ {source_label} ]"
+        )
+    else:
+        answer = "Tôi không thể xác minh thông tin này từ nguồn hiện có."
+
+    return {
+        "answer": answer,
+        "sources": chunks,
+        "retrieval_source": chunks[0].get("source", "hybrid") if chunks else "none",
+    }
 
 
 if __name__ == "__main__":
