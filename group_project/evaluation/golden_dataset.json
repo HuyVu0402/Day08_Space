@@ -1,17 +1,77 @@
 [
   {
-    "question": "Người mua có thể yêu cầu trả hàng/hoàn tiền trong thời hạn bao lâu sau khi nhận hàng?",
-    "expected_answer": "Trong vòng 15 ngày kể từ khi giao hàng thành công (24 giờ đối với thực phẩm tươi sống/đông lạnh).",
-    "expected_context": "Trang Returns and Refunds Policy, mục Return/Refund Eligibility"
+    "question": "Người mua được yêu cầu trả hàng hoặc hoàn tiền trong bao lâu kể từ ngày nhận hàng?",
+    "expected_answer": "Người mua có thể gửi yêu cầu trong vòng 30 ngày đối với sản phẩm LazMall và Choice, hoặc trong vòng 15 ngày đối với sản phẩm từ nhà bán hàng thường, tính từ ngày nhận hàng.",
+    "expected_context": "lazada_chinh_sach_doi_tra_hoan_tien.md, mục 1. Thời hạn và Điều kiện Trả hàng / Hoàn tiền"
   },
   {
-    "question": "Shopee hỗ trợ những phương thức thanh toán nào?",
-    "expected_answer": "ShopeePay Wallet, thẻ tín dụng/ghi nợ, trả góp qua thẻ, QR Code, chuyển khoản qua app ngân hàng, thẻ NAPAS, Apple Pay, Google Pay, và COD.",
-    "expected_context": "Trang Payment Methods Overview"
+    "question": "Sản phẩm cần đáp ứng điều kiện gì để được Lazada xem xét đổi trả?",
+    "expected_answer": "Sản phẩm đổi trả phải còn nguyên tem mác, bao bì ban đầu, chưa qua sử dụng và có đầy đủ phụ kiện kèm theo. Lý do đổi ý chỉ được hỗ trợ đối với các gian hàng đủ điều kiện.",
+    "expected_context": "lazada_chinh_sach_doi_tra_hoan_tien.md, mục 1. Thời hạn và Điều kiện Trả hàng / Hoàn tiền"
   },
   {
-    "question": "Người bán không được đăng bán những sản phẩm nào?",
-    "expected_answer": "Hàng giả/nhái, sản phẩm bất hợp pháp, vi phạm sở hữu trí tuệ, và các mặt hàng nằm trong danh sách cấm của sàn.",
-    "expected_context": "Trang Product Listing Regulations, mục Prohibited Content"
+    "question": "Sau khi yêu cầu trả hàng được chấp nhận, người mua phải bàn giao bưu kiện trong thời hạn nào và bằng những cách nào?",
+    "expected_answer": "Người mua phải đóng gói sản phẩm, dán mã vận đơn đổi trả và bàn giao cho đơn vị vận chuyển trong vòng 3 ngày làm việc, bằng hình thức thu gom tại nhà hoặc gửi tại bưu cục.",
+    "expected_context": "lazada_chinh_sach_doi_tra_hoan_tien.md, mục 2. Quy trình gửi sản phẩm và Bàn giao đơn vị vận chuyển"
+  },
+  {
+    "question": "Thời gian nhận tiền hoàn khác nhau như thế nào giữa thẻ ngân hàng, ví điện tử và chuyển khoản ngân hàng?",
+    "expected_answer": "Tiền hoàn về thẻ tín dụng hoặc thẻ ghi nợ trong 3–5 ngày làm việc, về ví điện tử ZaloPay hoặc MoMo trong 1–2 ngày làm việc, và qua chuyển khoản ngân hàng trong 3–7 ngày làm việc. Với LazPayLater, hạn mức được hoàn lại ngay.",
+    "expected_context": "lazada_chinh_sach_doi_tra_hoan_tien.md, mục 3. Phương thức và Thời gian Xử lý Hoàn tiền"
+  },
+  {
+    "question": "LazPayLater cho phép người mua thanh toán theo những kỳ hạn nào?",
+    "expected_answer": "LazPayLater cho phép người mua thanh toán vào kỳ tiếp theo hoặc trả góp trong 3, 6 hoặc 12 tháng.",
+    "expected_context": "lazada_dieu_khoan_lazpaylater.md, mục 1. Giới thiệu và Hạn mức Tín dụng LazPayLater"
+  },
+  {
+    "question": "Sao kê LazPayLater chốt ngày nào, hạn thanh toán là khi nào và trả chậm bị tính phí ra sao?",
+    "expected_answer": "Sao kê được chốt vào ngày 25 hằng tháng, hạn thanh toán là ngày 5 của tháng kế tiếp. Nếu trả chậm, khách hàng bị tính phí 0,1% mỗi ngày trên số tiền quá hạn.",
+    "expected_context": "lazada_dieu_khoan_lazpaylater.md, mục 2. Thanh toán Dư nợ và Phí chậm trả"
+  },
+  {
+    "question": "Người mua có thể thanh toán dư nợ LazPayLater bằng các phương thức nào?",
+    "expected_answer": "Người mua có thể thanh toán dư nợ LazPayLater qua ví ZaloPay, chuyển khoản ngân hàng hoặc thẻ ATM nội địa.",
+    "expected_context": "lazada_dieu_khoan_lazpaylater.md, mục 2. Thanh toán Dư nợ và Phí chậm trả"
+  },
+  {
+    "question": "Nhà bán hàng bị cấm đăng bán những nhóm sản phẩm nào trên Lazada?",
+    "expected_answer": "Nhà bán hàng không được đăng bán hàng giả, hàng nhái, hàng vi phạm quyền sở hữu trí tuệ, vũ khí, chất nổ, thuốc kích thích, thực phẩm không rõ nguồn gốc và các mặt hàng bị pháp luật Việt Nam cấm.",
+    "expected_context": "lazada_quy_dinh_dang_ban_nha_ban_hang.md, mục 1. Danh mục Sản phẩm Cấm đăng bán và Quy định Hàng hóa"
+  },
+  {
+    "question": "Nhà bán hàng thường và gian hàng LazMall phải chịu mức phí hoa hồng sàn bao nhiêu?",
+    "expected_answer": "Nhà bán hàng thường chịu phí hoa hồng từ 2% đến 5% tùy ngành hàng; gian hàng LazMall chịu phí từ 3% đến 8% theo hợp đồng đại lý thương hiệu.",
+    "expected_context": "lazada_article_04.md, mục 2. Phí hoa hồng sàn (Commission Fee)"
+  },
+  {
+    "question": "Lazada yêu cầu nhà bán hàng xử lý đơn trong bao lâu và giới hạn tỷ lệ hủy đơn do lỗi nhà bán hàng là bao nhiêu?",
+    "expected_answer": "Nhà bán hàng phải xác nhận và đóng gói đơn trong vòng 24 giờ kể từ khi đơn được tạo; tỷ lệ hủy đơn do lỗi nhà bán hàng không được vượt quá 1%.",
+    "expected_context": "lazada_quy_dinh_dang_ban_nha_ban_hang.md, mục 3. Chỉ số Vận hành và Quy trình Xử lý Đơn hàng (SLA)"
+  },
+  {
+    "question": "Người mua tra cứu mã vận đơn và trạng thái giao hàng trên ứng dụng Lazada như thế nào?",
+    "expected_answer": "Người mua đăng nhập ứng dụng Lazada, vào Tài khoản, chọn Đơn hàng của tôi rồi mở đơn cần kiểm tra để xem đơn vị vận chuyển, mã vận đơn và các trạng thái từ Đã xác nhận đến Đã giao.",
+    "expected_context": "lazada_article_03.md, mục 1. Cách tra cứu trạng thái đơn hàng trên App"
+  },
+  {
+    "question": "Nếu đơn hàng chậm hơn thời gian dự kiến quá 3 ngày, khách hàng có thể làm gì?",
+    "expected_answer": "Khách hàng có thể chọn Chat với Lazada qua CLEO để được hỗ trợ thúc đẩy giao hàng hoặc yêu cầu hủy đơn và hoàn tiền.",
+    "expected_context": "lazada_article_03.md, mục 3. Xử lý sự cố giao hàng chậm hoặc thất lạc; lazada_article_06.md, mục 1. Kênh hỗ trợ trực tuyến Trợ lý CLEO (24/7)"
+  },
+  {
+    "question": "Hãy nêu các bước người mua cần thực hiện từ lúc tạo yêu cầu trả hàng đến lúc bàn giao sản phẩm cho đơn vị vận chuyển.",
+    "expected_answer": "Người mua vào Tài khoản, mở danh sách đơn hàng, chọn đơn cần trả và nhấn Trả hàng/Hoàn tiền; sau đó chọn lý do, tải ảnh hoặc video minh chứng cùng hóa đơn hoặc phiếu giao hàng, chọn hình thức hoàn tiền và phương thức gửi hàng. Sản phẩm phải được đóng gói cẩn thận, dán mã vận đơn trả hàng và bàn giao cho tài xế thu gom hoặc bưu cục trong vòng 3 ngày làm việc.",
+    "expected_context": "lazada_article_01.md, mục 1. Các bước thực hiện yêu cầu Trả hàng / Hoàn tiền và mục 2. Quy định đóng gói hàng trả; lazada_chinh_sach_doi_tra_hoan_tien.md, mục 2. Quy trình gửi sản phẩm và Bàn giao đơn vị vận chuyển"
+  },
+  {
+    "question": "Ngày mai thời tiết tại Hà Nội như thế nào?",
+    "expected_answer": "Tôi không thể xác minh thông tin thời tiết từ kho tài liệu chính sách và hướng dẫn sử dụng Lazada hiện có.",
+    "expected_context": "Không có ngữ cảnh phù hợp trong corpus Lazada"
+  },
+  {
+    "question": "Thuốc metformin nên uống trước hay sau bữa ăn?",
+    "expected_answer": "Tôi không thể xác minh hướng dẫn sử dụng thuốc từ kho tài liệu chính sách và hướng dẫn sử dụng Lazada hiện có.",
+    "expected_context": "Không có ngữ cảnh phù hợp trong corpus Lazada"
   }
 ]
