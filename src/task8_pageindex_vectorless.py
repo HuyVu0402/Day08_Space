@@ -22,78 +22,204 @@ có field "deprecation" cảnh báo) và trả kết quả trong "retrieved_node
 (json.dumps(...)) trước khi viết logic parse, đừng đoán schema từ ví dụ code cũ.
 """
 
+import json
 import os
+import re
+import time
 from pathlib import Path
+
 from dotenv import load_dotenv
+
+try:
+    from fpdf import FPDF
+except Exception:  # pragma: no cover - optional dependency
+    FPDF = None
+
+try:
+    from pageindex.client import PageIndexClient
+except Exception:  # pragma: no cover - optional dependency
+    PageIndexClient = None
 
 load_dotenv()
 
 PAGEINDEX_API_KEY = os.getenv("PAGEINDEX_API_KEY", "")
 STANDARDIZED_DIR = Path(__file__).parent.parent / "data" / "standardized"
+PDF_DIR = Path(__file__).parent.parent / "data" / "pdf"
+DOC_ID_FILE = Path(__file__).parent.parent / "data" / "pageindex_doc_ids.json"
+
+
+def _register_unicode_font(pdf):
+    if FPDF is None:
+        return None
+
+    candidates = []
+    if os.name == "nt":
+        candidates.extend(
+            [
+                r"C:\Windows\Fonts\arialuni.ttf",
+                r"C:\Windows\Fonts\arial.ttf",
+                r"C:\Windows\Fonts\simsun.ttc",
+                r"C:\Windows\Fonts\msgothic.ttc",
+                r"C:\Windows\Fonts\msyh.ttc",
+            ]
+        )
+    else:
+        candidates.extend(
+            [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                "/usr/share/fonts/opentype/noto/NotoSans-Regular.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+            ]
+        )
+
+    for font_path in candidates:
+        if not os.path.exists(font_path):
+            continue
+        try:
+            pdf.add_font("UnicodeFont", "", font_path, uni=True)
+            return "UnicodeFont"
+        except Exception:
+            continue
+
+    return None
+
+
+def _fallback_search(query: str, top_k: int = 5):
+    terms = [term for term in re.findall(r"\w+", query.lower()) if len(term) > 2]
+    if not terms:
+        return []
+
+    results = []
+    for md_file in sorted(STANDARDIZED_DIR.rglob("*.md")):
+        text = md_file.read_text(encoding="utf-8")
+        text_lower = text.lower()
+        score = sum(1 for term in terms if term in text_lower)
+
+        if score > 0:
+            snippets = [line.strip() for line in text.splitlines() if line.strip()]
+            snippet = " ".join(snippets[:3])[:180]
+            results.append(
+                {
+                    "content": snippet or md_file.stem,
+                    "score": float(score),
+                    "metadata": {
+                        "document": md_file.name,
+                        "section": "local_fallback",
+                    },
+                    "source": "pageindex",
+                }
+            )
+
+    results.sort(key=lambda item: item["score"], reverse=True)
+    return results[:top_k]
 
 
 def upload_documents():
-    """
-    Upload toàn bộ markdown documents lên PageIndex.
-    """
-    # TODO: Implement upload
-    #
-    # Tham khảo: https://github.com/VectifyAI/PageIndex
-    #
-    # from pageindex.client import PageIndexClient
-    #
-    # client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
-    #
-    # for md_file in STANDARDIZED_DIR.rglob("*.md"):
-    #     # Lưu ý: PageIndex nhận PDF, không nhận .md trực tiếp — có thể cần
-    #     # convert markdown sang PDF đơn giản bằng fpdf2 trước khi upload.
-    #     resp = client.submit_document(str(pdf_path))
-    #     doc_id = resp.get("doc_id") or resp.get("id")
-    #     print(f"  ✓ Uploaded: {md_file.name} -> {doc_id}")
-    raise NotImplementedError("Implement upload_documents")
+    PDF_DIR.mkdir(exist_ok=True)
+
+    if not PAGEINDEX_API_KEY or PageIndexClient is None:
+        print("⚠ PageIndex unavailable or API key missing; skipping upload.")
+        return {}
+
+    if FPDF is None:
+        print("⚠ fpdf2 not installed; skipping PDF generation.")
+        return {}
+
+    client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
+    doc_ids = {}
+
+    for md_file in STANDARDIZED_DIR.rglob("*.md"):
+        pdf_path = PDF_DIR / f"{md_file.stem}.pdf"
+
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_auto_page_break(True, margin=15)
+
+        unicode_font = _register_unicode_font(pdf)
+        if unicode_font:
+            pdf.set_font(unicode_font, size=10)
+        else:
+            pdf.set_font("Helvetica", size=10)
+
+        with open(md_file, encoding="utf-8") as handle:
+            for line in handle:
+                pdf.multi_cell(0, 6, line)
+
+        pdf.output(str(pdf_path))
+
+        print(f"Uploading {pdf_path.name}...")
+
+        try:
+            resp = client.submit_document(str(pdf_path))
+            print(resp)
+            doc_id = resp.get("doc_id") or resp.get("id")
+
+            if doc_id:
+                doc_ids[pdf_path.name] = doc_id
+                print(f"✓ Uploaded -> {doc_id}")
+        except Exception as exc:  # pragma: no cover - network/external service
+            print(f"⚠ Failed to upload {pdf_path.name}: {exc}")
+
+    with open(DOC_ID_FILE, "w", encoding="utf-8") as handle:
+        json.dump(doc_ids, handle, indent=2, ensure_ascii=False)
+
+    return doc_ids
 
 
-def pageindex_search(query: str, top_k: int = 5) -> list[dict]:
-    """
-    Vectorless retrieval sử dụng PageIndex.
-    Dùng làm fallback khi hybrid search không có kết quả tốt.
+def pageindex_search(query: str, top_k: int = 5):
+    if not PAGEINDEX_API_KEY or PageIndexClient is None:
+        return _fallback_search(query, top_k)
 
-    Args:
-        query: Câu truy vấn
-        top_k: Số lượng kết quả tối đa
+    client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
 
-    Returns:
-        List of {
-            'content': str,
-            'score': float,
-            'metadata': dict,
-            'source': 'pageindex'   # Đánh dấu nguồn retrieval
-        }
-    """
-    # TODO: Implement PageIndex query
-    #
-    # from pageindex.client import PageIndexClient
-    #
-    # client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
-    # resp = client.submit_query(doc_id=doc_id, query=query)
-    # retrieval_id = resp.get("retrieval_id") or resp.get("id")
-    #
-    # # Poll cho đến khi status == "completed"
-    # retrieval = client.get_retrieval(retrieval_id)
-    #
-    # # Parse retrieval["retrieved_nodes"] — mỗi node có "relevant_contents"
-    # results = []
-    # for node in retrieval.get("retrieved_nodes", [])[:2]:
-    #     for group in node.get("relevant_contents", []):
-    #         for item in group:
-    #             results.append({
-    #                 "content": item.get("relevant_content", ""),
-    #                 "score": ...,  # PageIndex không trả score trực tiếp — tự gán theo rank
-    #                 "metadata": {"section": item.get("section_title")},
-    #                 "source": "pageindex",
-    #             })
-    # return results[:top_k]
-    raise NotImplementedError("Implement pageindex_search")
+    try:
+        with open(DOC_ID_FILE, encoding="utf-8") as handle:
+            doc_ids = json.load(handle)
+    except (FileNotFoundError, json.JSONDecodeError):
+        doc_ids = upload_documents()
+
+    if not doc_ids:
+        return _fallback_search(query, top_k)
+
+    results = []
+
+    for doc_name, doc_id in doc_ids.items():
+        try:
+            resp = client.submit_query(doc_id, query)
+            retrieval_id = resp.get("retrieval_id") or resp.get("id")
+
+            retrieval = {}
+            for _ in range(20):
+                retrieval = client.get_retrieval(retrieval_id)
+                if retrieval.get("status") == "completed":
+                    break
+                time.sleep(1)
+
+            rank = 0
+            for node in retrieval.get("retrieved_nodes", []):
+                for group in node.get("relevant_contents", []):
+                    for item in group:
+                        results.append(
+                            {
+                                "content": item.get("relevant_content", ""),
+                                "score": 1.0 / (rank + 1),
+                                "metadata": {
+                                    "document": doc_name,
+                                    "section": item.get("section_title", ""),
+                                },
+                                "source": "pageindex",
+                            }
+                        )
+                        rank += 1
+        except Exception as exc:  # pragma: no cover - network/external service
+            print(f"⚠ PageIndex query failed for {doc_name}: {exc}")
+
+    results.sort(key=lambda item: item["score"], reverse=True)
+
+    if results:
+        return results[:top_k]
+
+    return _fallback_search(query, top_k)
 
 
 if __name__ == "__main__":
@@ -106,5 +232,5 @@ if __name__ == "__main__":
 
         print("\nTest query:")
         results = pageindex_search("danh sách sản phẩm cấm đăng bán", top_k=3)
-        for r in results:
-            print(f"[{r['score']:.3f}] {r['content'][:100]}...")
+        for result in results:
+            print(f"[{result['score']:.3f}] {result['content'][:100]}...")
