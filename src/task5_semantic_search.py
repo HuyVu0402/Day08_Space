@@ -1,6 +1,14 @@
-from sentence_transformers import SentenceTransformer
-import chromadb
 from pathlib import Path
+
+try:
+    from sentence_transformers import SentenceTransformer
+except Exception:  # pragma: no cover - optional dependency
+    SentenceTransformer = None
+
+try:
+    import chromadb
+except Exception:  # pragma: no cover - optional dependency
+    chromadb = None
 
 CHROMA_DIR = Path(__file__).parent.parent / "chroma_db"
 COLLECTION_NAME = "ecommerce_support_docs"
@@ -11,6 +19,9 @@ def semantic_search(query: str, top_k: int = 10) -> list[dict]:
     """
     Dense retrieval bằng cosine similarity trên ChromaDB.
     """
+
+    if SentenceTransformer is None or chromadb is None:
+        return []
 
     # Load embedding model
     model = SentenceTransformer(EMBEDDING_MODEL)
