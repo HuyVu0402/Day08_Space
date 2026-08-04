@@ -79,10 +79,10 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+|Vũ Quang Huy |2A202601412 |Team Leader & RAG Architect |Đã xong |
+|Nguyễn Hoàng Sơn |2A202601939 |Data & Retrieval Specialist |Đã xong |
+|Nguyễn Đức Mạnh |2A202601176 |Frontend & Chatbot Developer |Đã xong |
+|Thiều Thị Ngọc Ánh |2A202601864 |Evaluation & QA Engineer |Đã xong |
 
 ---
 
